@@ -1,8 +1,9 @@
 import Modal from 'react-modal'
-import { Container, TransactionTypeContainer } from './styles'
+import { Container, RadioBox, TransactionTypeContainer } from './styles'
 import closeImg from '../../assets/close.svg'
 import incomeImg from '../../assets/income.svg'
 import outcomeImg from '../../assets/outcome.svg'
+import { useState } from 'react'
 
 
 interface NewTransactionModalProps{
@@ -12,30 +13,52 @@ interface NewTransactionModalProps{
 
 
 export function NewTransactionModal({isOpen, onRequestClose}:NewTransactionModalProps){
+
+    const [type, setType]= useState('deposit')
+
+    
+
     return(
+        
+        
         <Modal overlayClassName='react-modal-overlay'
         className='react-modal-content'
           isOpen={isOpen}
           onRequestClose={onRequestClose}
         >
         <button className='react-modal-close'
-         type='button'
-          onClick={onRequestClose}>
+            type='button'
+            onClick={onRequestClose}>
             <img src={closeImg} alt="Fechar modal"/>
         </button>
+            
          <Container>
          <h2>Cadastrar Transação</h2>
          <input type="text" placeholder='Titulo'/>
          <input type="text" placeholder='Valor'/>
+          
          <TransactionTypeContainer>
-             <button type='button'>
+
+             <RadioBox 
+                type='button'
+                onClick={()=> setType('deposit')}
+                isActive={type === 'deposit'}
+                activeColor='green'
+             >
+                 
                 <img src={incomeImg} alt="Entrada"/>
                 <span>Entrada</span>
-             </button>
-             <button type='button'>
+             </RadioBox>
+
+             <RadioBox 
+                type='button'
+                onClick={()=> setType('withdraw')}
+                isActive={type === 'withdraw'}
+                activeColor='red'
+                >
                 <img src={outcomeImg} alt="Saida"/>
                 <span>Saida</span>
-             </button>
+             </RadioBox>
              
          </TransactionTypeContainer>
          <input type="text" placeholder='Categoria'/>
