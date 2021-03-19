@@ -1,3 +1,4 @@
+import { type } from 'os';
 import { transitions } from 'polished';
 import {createContext, useEffect, useState, ReactNode} from 'react'
 import { api } from './services/api';
@@ -12,12 +13,20 @@ interface Transaction{
     createdAt: string,
   
   }
-interface TrasactionsProviderProps{
+
+  type TransactionInput = Omit<Transaction, 'id' | 'createdAt'>
+
+  interface TrasactionsProviderProps{
     children: ReactNode;
 }
 
+interface TransactionsContextData{
+    transactions: Transaction[];
+    createTransaction:(transaction: TransactionInput)=> void;
+}
 
-export const TransactionsContext = createContext<Transaction[]>([])
+
+export const TransactionsContext = createContext<TransactionsContextData>({}as TransactionsContextData)
 
 
 export function TransactionsProvider({children}:TrasactionsProviderProps){
@@ -30,9 +39,15 @@ export function TransactionsProvider({children}:TrasactionsProviderProps){
       .then((response) => setTransactions(response.data.transactions));
     }, []);
 
+    function createTransaction(transaction:TransactionInput){
+        
+
+    api.post('/transactions', transaction)
+    }
+
 
     return(
-        <TransactionsContext.Provider value={transactions}>
+        <TransactionsContext.Provider value={{transactions, createTransaction}}>
             {children}
         </TransactionsContext.Provider>
 
