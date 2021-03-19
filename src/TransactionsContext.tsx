@@ -5,12 +5,12 @@ import { api } from './services/api';
 
 
 interface Transaction{
-    id: number,
-    title: string,
-    amount: number,
-    type: string,
-    category: string,
-    createdAt: string,
+    id: number;
+    title: string;
+    amount: number;
+    type: string;
+    category: string;
+    createdAt: string;
   
   }
 
@@ -22,7 +22,7 @@ interface Transaction{
 
 interface TransactionsContextData{
     transactions: Transaction[];
-    createTransaction:(transaction: TransactionInput)=> void;
+    createTransaction:(transaction: TransactionInput)=> Promise<void>;
 }
 
 
@@ -39,10 +39,16 @@ export function TransactionsProvider({children}:TrasactionsProviderProps){
       .then((response) => setTransactions(response.data.transactions));
     }, []);
 
-    function createTransaction(transaction:TransactionInput){
+    async function createTransaction(transactionInput:TransactionInput){
         
 
-    api.post('/transactions', transaction)
+    const response = await api.post('/transactions',{
+        ...transactionInput,
+         createdAt: new Date(),
+        })
+    const {transaction} = response.data;
+    
+    setTransactions([...transactions, transaction])
     }
 
 

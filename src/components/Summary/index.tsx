@@ -9,8 +9,12 @@ import { Container } from './styles';
 export function Summary() {
   const {transactions} = useContext(TransactionsContext)
 
-  
-const data =useContext(TransactionsContext)
+    // const totalDeposits = transactions.reduce((acc, transaction)=>{
+    //   if (transaction.type === 'deposit'){
+    //     return acc + transaction.amount;
+    //   }
+    // })
+
 
   return (
     <Container>
